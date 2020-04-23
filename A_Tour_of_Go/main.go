@@ -56,6 +56,12 @@ func deferHello() {
 
 var c, python, java bool = true, true, false
 
+// Vertex
+type Vertex struct {
+	X int
+	Y int
+}
+
 func main() {
 	fmt.Println("3 + 4 =", add(3, 4))
 	fmt.Println(swap("world", "hello"))
@@ -67,4 +73,18 @@ func main() {
 	fmt.Println(pow(2, 10, 2000))
 	myOs()
 	deferHello()
+	v := Vertex{1, 2}
+	p := &v
+	p.X = 1e9
+	fmt.Println(v, p)
+	a := make([]int, 5)
+	fmt.Println(a, len(a), cap(a))
+	a[0] = 1
+	fmt.Println(a)
+	var m map[string]Vertex
+	m = make(map[string]Vertex)
+	m["sample"] = Vertex{1, 4}
+	g, ok := m["simple"]
+	fmt.Println(g, ok)
+	fmt.Println(m)
 }
