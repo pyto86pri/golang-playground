@@ -20,14 +20,12 @@ func swap(x, y string) (string, string) {
 	return y, x
 }
 
-func nsum(n int) (sum int) {
-	if n < 0 {
-		return
-	}
+func nsum(n int, c chan<- int) {
+	sum := 0
 	for i := 0; i <= n; i++ {
 		sum += i
 	}
-	return
+	c <- sum
 }
 
 func pow(x, n, lim float64) float64 {
@@ -58,33 +56,34 @@ var c, python, java bool = true, true, false
 
 // Vertex
 type Vertex struct {
-	X int
-	Y int
+	X, Y float64
+}
+
+// Abs
+func (v *Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
 func main() {
-	fmt.Println("3 + 4 =", add(3, 4))
-	fmt.Println(swap("world", "hello"))
-	var i, j int = 1, 2
-	k := 3
-	fmt.Println(i, j, k, c, python, java)
-	fmt.Println(nsum(10))
-	fmt.Println(nsum(-2))
-	fmt.Println(pow(2, 10, 2000))
-	myOs()
-	deferHello()
-	v := Vertex{1, 2}
-	p := &v
-	p.X = 1e9
-	fmt.Println(v, p)
-	a := make([]int, 5)
-	fmt.Println(a, len(a), cap(a))
-	a[0] = 1
-	fmt.Println(a)
-	var m map[string]Vertex
-	m = make(map[string]Vertex)
-	m["sample"] = Vertex{1, 4}
-	g, ok := m["simple"]
-	fmt.Println(g, ok)
-	fmt.Println(m)
+	var i interface{} = "hello"
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	switch v := i.(type) {
+	case string:
+		fmt.Println(v, "string!!")
+	case float64:
+		fmt.Println(v, "float!!")
+	default:
+		fmt.Println(v, "other!!")
+	}
+
+	c := make(chan int)
+	go nsum(100, c)
+	res := <-c
+	fmt.Println(res)
 }
